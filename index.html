@@ -1,5 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF
-      
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Idea's Perfect Pitching Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.1.2/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .prose h1 { @apply text-2xl font-bold text-slate-900 mb-6 mt-8; }
+        .prose h2 { @apply text-xl font-semibold text-slate-800 mb-4 border-b border-slate-200 pb-3; }
+        .prose h3 { @apply text-lg font-semibold text-slate-700 mb-3; }
+        .prose p { @apply mb-4 leading-relaxed text-slate-700; }
+        .prose ul, .prose ol { @apply mb-4 pl-6; }
+        .prose table { @apply w-full border-collapse border-slate-200 mb-6; }
+        .prose th, .prose td { @apply border border-slate-200 p-3 text-left; }
+        .prose th { @apply bg-slate-50 font-semibold; }
+        .loader { @apply w-6 h-6 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mx-auto; }
+        .page-enter { animation: slideIn 0.3s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-blue-50 min-h-screen text-slate-800">
+
+    <!-- App Container -->
+    <div id="appContainer" class="min-h-screen">
+
+        <!-- Landing Page -->
+        <div id="landingPage" class="max-w-md mx-auto pt-24 px-4 fade-in">
+            <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/50">
+                <div class="text-center mb-12">
+                    <div class="w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent mb-3">Business Idea's</h1>
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Perfect Pitching Document</h2>
+                    <p class="text-slate-500 mt-4 text-sm">Generate professional business proposals instantly</p>
+                </div>
+
+                <div class="space-y-4">
+                    <button onclick="showPage('signup')" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-3 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                        Create Account
+                    </button>
+                    <button onclick="showPage('login')" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transform hover:scale-[1.02] transition-all duration-200 flex items-center justify-center gap-3 text-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                        Sign In
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Create Account Page -->
+        <div id="signupPage" class="hidden max-w-md mx-auto pt-16 px-4 page-enter">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border border-slate-200">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-slate-900 mb-2">Create Your Account</h1>
+                    <p class="text-slate-500">₹50 per report generation</p>
+                </div>
+
+                <form id="signupForm" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
+                        <input type="email" id="signupEmail" required class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Username (Bank Name)</label>
+                        <input type="text" id="signupUsername" required class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                        <p class="text-xs text-slate-500 mt-1">Use exact name as in your bank account</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+                        <input type="password" id="signupPassword" required minlength="6" class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Gemini API Key <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full font-medium">Required</span></label>
+                        <div class="flex gap-2">
+                            <input type="password" id="signupApiKey" placeholder="AIza..." required class="flex-1 p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                            <button type="button" onclick="showApiInstructions()" class="px-4 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-semibold transition-colors">?</button>
+                        </div>
+                        <p class="text-xs text-slate-500 mt-1">Get it from <a href="https://aistudio.google.com/app/api-keys?hl=en-IN" target="_blank" class="text-blue-600 hover:underline">Google AI Studio</a></p>
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 text-lg">
+                        Create Account & Continue
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- API Instructions Modal -->
+        <div id="apiModal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+            <div class="bg-white rounded-2xl max-w-md w-full max-h-[80vh] overflow-y-auto p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-slate-900">Get Gemini API Key</h3>
+                    <button onclick="hideApiInstructions()" class="text-slate-400 hover:text-slate-600 text-2xl">&times;</button>
+                </div>
+                <div class="space-y-4 text-sm">
+                    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                        <ol class="space-y-2 list-decimal list-inside">
+                            <li>Go to <a href="https://aistudio.google.com/app/api-keys?hl=en-IN" target="_blank" class="font-semibold text-blue-700 hover:underline">aistudio.google.com/app/api-keys</a></li>
+                            <li>Sign in with your Google account</li>
+                            <li>Click <strong>"Create API Key"</strong></li>
+                            <li>Copy the API key (starts with "AIza...")</li>
+                            <li>Paste it in the input box above</li>
+                        </ol>
+                    </div>
+                    <p class="text-xs text-slate-500">Keep this key private. Don't share it with anyone.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sign In Page -->
+        <div id="loginPage" class="hidden max-w-md mx-auto pt-16 px-4 page-enter">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border border-slate-200">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-slate-900 mb-2">Welcome Back</h1>
+                    <p class="text-slate-500">Sign in to access your documents</p>
+                </div>
+                <form id="loginForm" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Username</label>
+                        <input type="text" id="loginUsername" required class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Password</label>
+                        <input type="password" id="loginPassword" required class="w-full p-4 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm">
+                    </div>
+                    <button type="submit" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 text-lg">
+                        Sign In
+                    </button>
+                </form>
+                <div class="mt-6 text-center">
+                    <button onclick="showPage('signup')" class="text-sm text-blue-600 hover:underline font-medium">Create new account</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Page -->
+        <div id="paymentPage" class="hidden max-w-lg mx-auto pt-12 px-4 page-enter">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border border-slate-200">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-slate-900 mb-2">Complete Payment</h1>
+                    <div class="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-2xl inline-block font-semibold mb-4">
+                        ₹50 per Report Generation
+                    </div>
+                    <p class="text-slate-500">Scan QR code or use UPI ID</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-8">
+                    <div class="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl border-2 border-dashed border-blue-200">
+                        <div class="w-32 h-32 bg-white rounded-xl mx-auto mb-4 p-2 shadow-lg">
+                            <!-- UPI QR Placeholder - Replace with actual QR image -->
+                            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iMTIwIiBmaWxsPSIjRkZGRkZGIi8+Cjx0ZXh0IHg9IjYwIiB5PSI2MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iI0JCMkJCMiI+aWFuaXNoYW5pdGEyQG9rYXhpczwvdGV4dD4KPC9zdmc+" alt="UPI QR" class="w-full h-full object-contain">
+                        </div>
+                        <p class="text-xs font-mono bg-white px-3 py-1 rounded-lg font-semibold text-slate-800 mb-1">aanishaanita2@okaxis</p>
+                        <p class="text-sm font-bold text-emerald-700">₹50.00</p>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+                            <h3 class="font-semibold text-yellow-800 mb-2">📱 Manual Payment</h3>
+                            <p class="text-sm text-yellow-800">Send exactly ₹50 to:</p>
+                            <div class="bg-white p-3 rounded-lg">
+                                <div class="text-lg font-mono font-bold text-slate-900 mb-1">aanishaanita2@okaxis</div>
+                                <div class="text-xs text-slate-600">Amount: ₹50.00</div>
+                            </div>
+                        </div>
+                        <button onclick="showPage('verifyPayment')" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 text-lg">
+                            Payment Done ✓ Upload Proof
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button onclick="showPage('login')" class="text-sm text-slate-600 hover:text-slate-900 font-medium">← Back to Sign In</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment Verification Page -->
+        <div id="verifyPaymentPage" class="hidden max-w-md mx-auto pt-16 px-4 page-enter">
+            <div class="bg-white rounded-3xl shadow-2xl p-8 border border-slate-200">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-slate-900 mb-2">Verify Payment</h1>
+                    <div class="w-16 h-16 bg-emerald-100 rounded-2xl mx-auto mb-4 flex items-center justify-center">
+                        <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-500">Upload your UPI transaction screenshot</p>
+                </div>
+
+                <div class="space-y-5">
+                    <div id="fileDrop" class="border-2 border-dashed border-slate-300 rounded-2xl p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                        <svg class="w-12 h-12 mx-auto mb-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                        </svg>
+                        <p class="text-lg font-semibold text-slate-700 mb-1">Drop screenshot here or click to select</p>
+                        <p class="text-sm text-slate-500">Supports JPG, PNG (Max 5MB)</p>
+                        <input type="file" id="paymentScreenshot" accept="image/*" class="hidden">
+                    </div>
+                    <button id="verifyBtn" onclick="verifyPayment()" disabled class="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-bold py-4 px-6 rounded-2xl shadow-lg transition-all duration-200 text-lg opacity-50">
+                        <span id="verifyText">Verify Payment</span>
+                        <div id="verifyLoader" class="hidden loader"></div>
+                    </button>
+                </div>
+                <div id="verifyResult" class="hidden mt-6 p-4 rounded-xl"></div>
+            </div>
+        </div>
+
+        <!-- Main App (Your Original App - Optimized) -->
+        <div id="mainApp" class="hidden min-h-screen">
+            <!-- Header -->
+            <header class="bg-white/80 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+                <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <div class="flex items-center gap-4">
+                        <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-xl font-bold text-lg shadow-lg">BIPPD</div>
+                        <div>
+                            <div class="font-bold text-xl text-slate-900" id="currentUserDisplay">User</div>
+                            <div class="text-sm text-slate-500" id="balanceDisplay">Balance: ₹0</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <button onclick="showHistory()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-sm font-medium rounded-xl transition-colors">History</button>
+                        <button onclick="logout()" class="px-4 py-2 bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium rounded-xl transition-colors">Logout</button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Input Section -->
+                <section class="lg:col-span-1 space-y-8">
+                    <!-- Student Details -->
+                    <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200 space-y-6">
+                        <h2 class="text-xl font-bold text-slate-900 border-b pb-3 border-slate-200">Project Details</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2 tracking-wide">Student Name</label>
+                                <input type="text" id="studentName" value="Aanish Kumar" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2 tracking-wide">Student ID</label>
+                                <input type="text" id="studentID" value="Ba/22-002" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2 tracking-wide">AELP Unit</label>
+                                <input type="text" id="aelpUnit" value="Soil Testing and Technology" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-500 uppercase mb-2 tracking-wide">Location</label>
+                                <input type="text" id="location" value="Agricultural College, Bapatla" class="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm font-medium">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Topic & Generate -->
+                    <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-200">
+                        <label 
