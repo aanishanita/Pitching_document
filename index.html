@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AELP Project Generator</title>
+    <!-- CSS and Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.2/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .loader { width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .prose h1 { font-size: 1.5rem; font-weight: 700; margin: 1rem 0; }
+        .prose p { margin-bottom: 0.75rem; line-height: 1.6; }
+        .prose table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.875rem; }
+        .prose th, .prose td { border: 1px solid #e2e8f0; padding: 0.5rem; text-align: left; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <!-- ACCESS WALL -->
+    <div id="loginOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-slate-900 p-4">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+            <div class="bg-blue-600 p-6 text-center text-white">
+                <h2 class="text-xl font-bold">Premium Access</h2>
+                <p class="text-blue-100 text-sm mt-1">Scan QR and enter your access code</p>
+            </div>
+            
+            <div class="p-6 flex flex-col items-center">
+                <div class="bg-slate-100 p-2 rounded-xl mb-6">
+                    <img src="./payment.png" alt="Payment QR" class="w-40 h-40 object-contain rounded-lg shadow-inner bg-white" onerror="this.src='https://placehold.co/200x200?text=QR+Error'">
+                </div>
+                
+                <div class="w-full space-y-4">
+                    <input type="text" id="accessCode" placeholder="AELP-XXXX-XXXX" class="w-full p-4 border rounded-xl text-center font-mono text-lg uppercase tracking-widest focus:ring-2 focus:ring-blue-500 outline-none">
+                    <button onclick="verifyCode()" id="verifyBtn" class="w-full bg-slate-900 text-white font-bold py-4 rounded-xl active:scale-95 transition-transform">Unlock Now</button>
+                    <p id="loginError" class="text-red-500 text-xs text-center font-medium min-h-[1rem]"></p>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-6 uppercase tracking-widest">AELP Project Generator v1.0</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" class="hidden min-h-screen flex flex-col">
+        <header class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-10">
+            <h1 class="font-bold text-blue-600">AELP Suite</h1>
+            <button onclick="location.reload()" class="text-xs text-slate-400 font-bold uppercase">Logout</button>
+        </header>
+
+        <main class="flex-1 p-4 space-y-4 max-w-4xl mx-auto w-full">
+            <!-- Inputs -->
+            <div class="bg-white p-6 rounded-2xl border shadow-sm space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="studentName" placeholder="Your Name" class="p-3 border rounded-lg text-sm bg-slate-50 w-full">
+                    <input type="text" id="studentID" placeholder="ID Number" class="p-3 border rounded-lg text-sm bg-slate-50 w-full">
+                </div>
+                <input type="text" id="aelpUnit" placeholder="AELP Unit Name" class="p-3 border rounded-lg text-sm bg-slate-50 w-full">
+                <textarea id="topicInput" rows="4" placeholder="Enter project topic or idea..." class="w-full p-3 border rounded-lg text-sm bg-slate-50"></textarea>
+                
+                <button onclick="generateReport()" id="genBtn" class="w-full bg-blue-600 text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200">Generate Report</button>
+                <div id="loader" class="hidden justify-center items-center gap-2">
+                    <div class="loader"></div>
+                    <span class="text-sm text-slate-500">AI is writing your report...</span>
+                </div>
+            </div>
+
+            <!-- Output -->
+            <div class="bg-white rounded-2xl border shadow-sm overflow-hidden">
+                <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Preview</span>
+                    <button onclick="copyText()" class="text-xs bg-white border px-3 py-1.5 rounded-md font-bold text-blue-600 shadow-sm">Copy Result</button>
+                </div>
+                <div id="output" class="p-6 prose max-w-none min-h-[300px] text-sm">
+                    <p class="text-slate-300 text-center mt-20">Report will appear here.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const KEY = "AIzaSyBTIDF601MO61d5HOqIMDY-NdKi26yDjfc";
+        const CODES = ["AELP-8X2M-90P1", "AELP-K7J2-L4M9", "AELP-3N5B-Q8R2", "AELP-V9C4-W1X6", "AELP-H2Y5-Z7A3", "AELP-D4E6-F8G0", "AELP-T1U3-V5W7", "AELP-S9R8-Q6P4", "AELP-M2N1-B3V5", "AELP-C4X7-Z9L1", "AELP-J5K8-H2G3", "AELP-F6D9-S1A4", "AELP-Q3W2-E4R5", "AELP-T7Y8-U9I0", "AELP-O1P2-L3K4"];
+
+        function verifyCode() {
+            const codeInput = document.getElementById('accessCode');
+            const err = document.getElementById('loginError');
+            const val = codeInput.value.trim().toUpperCase();
+
+            if (!val) { err.textContent = "Please enter a code."; return; }
+
+            // Check if code is valid
+            if (!CODES.includes(val)) {
+                err.textContent = "Invalid access code.";
+                return;
+            }
+
+            // Check Storage (with crash protection)
+            try {
+                const used = JSON.parse(localStorage.getItem('used_codes') || "[]");
+                if (used.includes(val)) {
+                    err.textContent = "This code has already been used.";
+                    return;
+                }
+                used.push(val);
+                localStorage.setItem('used_codes', JSON.stringify(used));
+            } catch (e) {
+                console.warn("Storage blocked. Proceeding anyway.");
+            }
+
+            document.getElementById('loginOverlay').style.display = 'none';
+            document.getElementById('mainApp').classList.remove('hidden');
+        }
+
+        async function generateReport() {
+            const topic = document.getElementById('topicInput').value;
+            const btn = document.getElementById('genBtn');
+            const load = document.getElementById('loader');
+            const out = document.getElementById('output');
+
+            if (!topic) return alert("Enter a topic!");
+
+            btn.classList.add('hidden');
+            load.classList.remove('hidden');
+            load.classList.add('flex');
+
+            const prompt = `Write a 1500-word Agricultural ELP Project Report for topic: "${topic}". Use Professional chapters, budget tables in ₹, and technical SOPs. Format in Markdown.`;
+
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const data = await res.json();
+                const text = data.candidates[0].content.parts[0].text;
+                window.generatedText = text;
+                out.innerHTML = marked.parse(text);
+            } catch (e) {
+                alert("Generation failed. Check your internet.");
+            } finally {
+                btn.classList.remove('hidden');
+                load.classList.remove('flex');
+                load.classList.add('hidden');
+            }
+        }
+
+        function copyText() {
+            if (!window.generatedText) return;
+            const el = document.createElement('textarea');
+            el.value = window.generatedText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            alert("Report copied!");
+        }
+    </script>
+</body>
+</html>
+
